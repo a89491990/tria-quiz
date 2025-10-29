@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tria Quiz - GitHub Style</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --github-dark: #0d1117;
+      --github-dark-secondary: #161b22;
+      --github-border: #30363d;
+      --github-text: #c9d1d9;
+      --github-text-secondary: #8b949e;
+      --github-accent: #58a6ff;
+      --github-green: #3fb950;
+      --github-orange: #db6d28;
+      --github-red: #f85149;
+      --github-purple: #bc8cff;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background-color: var(--github-dark);
+      color: var(--github-text);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .github-header {
+      background-color: var(--github-dark-secondary);
+      border-bottom: 1px solid var(--github-border);
+      padding: 16px 0;
+    }
+
+    .header-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--github-text);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 20px;
+    }
+
+    .logo-icon {
+      color: var(--github-purple);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-link {
+      color: var(--github-text);
+      text-decoration: none;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover {
+      color: var(--github-accent);
+    }
+
+    .github-button {
+      background-color: var(--github-green);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .github-button:hover {
+      background-color: #2ea043;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      flex: 1;
+    }
+
+    .repo-header {
+      border-bottom: 1px solid var(--github-border);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .repo-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .repo-name {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--github-accent);
+    }
+
+    .repo-badge {
+      background-color: var(--github-dark-secondary);
+      border: 1px solid var(--github-border);
+      border-radius: 24px;
+      padding: 4px 12px;
+      font-size: 14px;
+      color: var(--github-text-secondary);
+    }
+
+    .repo-description {
+      font-size: 18px;
+      color: var(--github-text);
+      margin-bottom: 16px;
+    }
+
+    .repo-meta {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      color: var(--github-text-secondary);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .quiz-container {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 24px;
+    }
+
+    .quiz-content {
+      background-color: var(--github-dark-secondary);
+      border: 1px solid var(--github-border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .quiz-tabs {
+      display: flex;
+      background-color: var(--github-dark);
+      border-bottom: 1px solid var(--github-border);
+    }
+
+    .quiz-tab {
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      color: var(--github-text-secondary);
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      border-bottom: 2px solid transparent;
+    }
+
+    .quiz-tab.active {
+      color: var(--github-accent);
+      border-bottom-color: var(--github-orange);
+    }
+
+    .quiz-tab:hover {
+      color: var(--github-text);
+    }
+
+    .quiz-body {
+      padding: 24px;
+    }
+
+    .question {
+      margin-bottom: 32px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .question-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background-color: var(--github-border);
+      color: var(--github-text);
+      border-radius: 50%;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .question-text {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--github-text);
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-left: 36px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background-color: var(--github-dark);
+      border: 1px solid var(--github-border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .option:hover {
+      background-color: rgba(88, 166, 255, 0.1);
+      border-color: var(--github-accent);
+    }
+
+    .option.selected {
+      background-color: rgba(88, 166, 255, 0.15);
+      border-color: var(--github-accent);
+    }
+
+    .option input {
+      display: none;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .option-marker {
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--github-border);
+      border-radius: 50%;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .option.selected .option-marker {
+      border-color: var(--github-accent);
+      background-color: var(--github-accent);
+    }
+
+    .option.selected .option-marker::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .option-text {
+      font-size: 14px;
+    }
+
+    .option-letter {
+      font-weight: 600;
+      margin-right: 8px;
+      color: var(--github-accent);
+    }
+
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background-color: var(--github-dark);
+      border-top: 1px solid var(--github-border);
+    }
+
+    .btn {
+      padding: 8px 16px;
+      background: none;
+      border: 1px solid var(--github-border);
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--github-text);
+    }
+
+    .btn-primary {
+      background-color: var(--github-green);
+      border-color: var(--github-green);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #2ea043;
+      border-color: #2ea043;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--github-dark-secondary);
+      border-color: var(--github-text-secondary);
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background-color: var(--github-dark-secondary);
+      border: 1px solid var(--github-border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 16px;
+      background-color: var(--github-dark);
+      border-bottom: 1px solid var(--github-border);
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .stats {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stat {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .stat-label {
+      color: var(--github-text-secondary);
+    }
+
+    .stat-value {
+      font-weight: 600;
+    }
+
+    .language-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .language-bar {
+      height: 8px;
+      background-color: var(--github-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .language-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .language-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .contributors {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contributor {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .contributor-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: var(--github-border);
+    }
+
+    .contributor-name {
+      font-size: 14px;
+      color: var(--github-accent);
+    }
+
+    .result-container {
+      padding: 40px 24px;
+      text-align: center;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .result-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      color: var(--github-green);
+    }
+
+    .result-title {
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: var(--github-text);
+    }
+
+    .result-score {
+      font-size: 48px;
+      font-weight: 700;
+      margin: 16px 0;
+      color: var(--github-accent);
+    }
+
+    .result-message {
+      font-size: 16px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+      color: var(--github-text-secondary);
+    }
+
+    .result-details {
+      background-color: var(--github-dark);
+      border-radius: 6px;
+      padding: 16px;
+      margin-top: 24px;
+      text-align: left;
+    }
+
+    .result-details h3 {
+      margin-bottom: 12px;
+      color: var(--github-text);
+    }
+
+    .correct-answer {
+      color: var(--github-green);
+      font-weight: 600;
+    }
+
+    .wrong-answer {
+      color: var(--github-red);
+      text-decoration: line-through;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .footer {
+      background-color: var(--github-dark-secondary);
+      border-top: 1px solid var(--github-border);
+      padding: 24px 0;
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--github-text-secondary);
+      font-size: 14px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-link {
+      color: var(--github-text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-link:hover {
+      color: var(--github-accent);
+    }
+
+    @media (max-width: 768px) {
+      .quiz-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .repo-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      
+      .quiz-footer {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- GitHub-style header -->
+  <header class="github-header">
+    <div class="header-container">
+      <div class="logo-container">
+        <a href="#" class="logo">
+          <i class="fas fa-code logo-icon"></i>
+          <span>Tria Quiz</span>
+        </a>
+        <nav class="nav-links">
+          <a href="#" class="nav-link">Dashboard</a>
+          <a href="#" class="nav-link">Repositories</a>
+          <a href="#" class="nav-link">Projects</a>
+          <a href="#" class="nav-link">Quiz</a>
+        </nav>
+      </div>
+      <button class="github-button">
+        <i class="fab fa-github"></i>
+        View on GitHub
+      </button>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <div class="container">
+    <!-- Repository header -->
+    <div class="repo-header">
+      <div class="repo-title">
+        <h1 class="repo-name">tria-knowledge-quiz</h1>
+        <span class="repo-badge">Public</span>
+      </div>
+      <p class="repo-description">Test your knowledge about Tria's innovative blockchain solutions</p>
+      <div class="repo-meta">
+        <div class="meta-item">
+          <i class="fas fa-code-branch"></i>
+          <span>main</span>
+        </div>
+        <div class="meta-item">
+          <i class="fas fa-eye"></i>
+          <span>128 views</span>
+        </div>
+        <div class="meta-item">
+          <i class="fas fa-star"></i>
+          <span>42 stars</span>
+        </div>
+        <div class="meta-item">
+          <i class="fas fa-code"></i>
+          <span>HTML 100%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz content -->
+    <div class="quiz-container">
+      <div class="quiz-content">
+        <div class="quiz-tabs">
+          <button class="quiz-tab active">
+            <i class="fas fa-code"></i>
+            Questions
+          </button>
+          <button class="quiz-tab">
+            <i class="fas fa-history"></i>
+            Previous Attempts
+          </button>
+          <button class="quiz-tab">
+            <i class="fas fa-chart-bar"></i>
+            Statistics
+          </button>
+        </div>
+
+        <form id="quizForm">
+          <div class="quiz-body">
+            <!-- Question 1 -->
+            <div class="question" id="q1">
+              <div class="question-header">
+                <div class="question-number">1</div>
+                <div class="question-text">What key infrastructure does Tria use to enable gasless cross‑chain settlements?</div>
+              </div>
+              <div class="options">
+                <label class="option">
+                  <input type="radio" name="q1" value="A">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">A</span> Token Share Network</div>
+                  </div>
+                </label>
+                <label class="option">
+                  <input type="radio" name="q1" value="B">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">B</span> BestPath AVS</div>
+                  </div>
+                </label>
+                <label class="option">
+                  <input type="radio" name="q1" value="C">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">C</span> Global Swap Bridge</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question hidden" id="q2">
+              <div class="question-header">
+                <div class="question-number">2</div>
+                <div class="question-text">Which financial activities does Tria unify in one app?</div>
+              </div>
+              <div class="options">
+                <label class="option">
+                  <input type="radio" name="q2" value="A">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">A</span> Lending and Insurance</div>
+                  </div>
+                </label>
+                <label class="option">
+                  <input type="radio" name="q2" value="B">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">B</span> Spending, trading and earning</div>
+                  </div>
+                </label>
+                <label class="option">
+                  <input type="radio" name="q2" value="C">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">C</span> Only trading and yield</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question hidden" id="q3">
+              <div class="question-header">
+                <div class="question-number">3</div>
+                <div class="question-text">How many countries is Tria's card reportedly accepted in?</div>
+              </div>
+              <div class="options">
+                <label class="option">
+                  <input type="radio" name="q3" value="A">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">A</span> 50+ countries</div>
+                  </div>
+                </label>
+                <label class="option">
+                  <input type="radio" name="q3" value="B">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">B</span> 100+ countries</div>
+                  </div>
+                </label>
+                <label class="option">
+                  <input type="radio" name="q3" value="C">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">C</span> 150+ countries</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question hidden" id="q4">
+              <div class="question-header">
+                <div class="question-number">4</div>
+                <div class="question-text">What does Tria claim users don't need to worry about when using its chain abstraction model?</div>
+              </div>
+              <div class="options">
+                <label class="option">
+                  <input type="radio" name="q4" value="A">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">A</span> Holding gas tokens, bridging assets, managing multiple wallets</div>
+                  </div>
+                </label>
+                <label class="option">
+                  <input type="radio" name="q4" value="B">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">B</span> Managing fiat bank accounts</div>
+                  </div>
+                </label>
+                <label class="option">
+                  <input type="radio" name="q4" value="C">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">C</span> VPN access and KYC</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question hidden" id="q5">
+              <div class="question-header">
+                <div class="question-number">5</div>
+                <div class="question-text">How much funding did Tria raise to build its self‑custodial neobank and payments infrastructure?</div>
+              </div>
+              <div class="options">
+                <label class="option">
+                  <input type="radio" name="q5" value="A">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">A</span> USD 5 million</div>
+                  </div>
+                </label>
+                <label class="option">
+                  <input type="radio" name="q5" value="B">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">B</span> USD 12 million</div>
+                  </div>
+                </label>
+                <label class="option">
+                  <input type="radio" name="q5" value="C">
+                  <div class="option-label">
+                    <div class="option-marker"></div>
+                    <div class="option-text"><span class="option-letter">C</span> USD 20 million</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="result-container hidden" id="result">
+              <div class="result-icon">
+                <i class="fas fa-trophy"></i>
+              </div>
+              <h2 class="result-title">Quiz Complete!</h2>
+              <div class="result-score" id="score">0/5</div>
+              <p class="result-message" id="message">You scored 0 out of 5. Keep learning about Tria!</p>
+              <div class="result-details">
+                <h3>Your Answers</h3>
+                <div id="answer-details"></div>
+              </div>
+              <button type="button" class="btn btn-primary" id="restart-btn" style="margin-top: 24px;">
+                <i class="fas fa-redo"></i> Take Quiz Again
+              </button>
+            </div>
+          </div>
+
+          <div class="quiz-footer" id="footer">
+            <button type="button" class="btn btn-secondary" id="prev-btn">
+              <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn btn-primary" id="next-btn">
+              Next <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="button" class="btn btn-primary hidden" id="submit-btn">
+              Submit Answers <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-card">
+          <div class="card-header">About</div>
+          <div class="card-body">
+            <p>This quiz tests your knowledge of Tria, a blockchain platform that unifies spending, trading, and earning in one app with gasless cross-chain settlements.</p>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-header">Quiz Stats</div>
+          <div class="card-body">
+            <div class="stats">
+              <div class="stat">
+                <span class="stat-label">Questions</span>
+                <span class="stat-value">5</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Difficulty</span>
+                <span class="stat-value">Intermediate</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Avg. Score</span>
+                <span class="stat-value">72%</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Time Limit</span>
+                <span class="stat-value">None</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-header">Languages</div>
+          <div class="card-body">
+            <div class="language-stats">
+              <div class="language-bar">
+                <div class="language-fill" style="width: 100%; background-color: var(--github-orange);"></div>
+              </div>
+              <div class="language-info">
+                <span>HTML</span>
+                <span>100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-header">Contributors</div>
+          <div class="card-body">
+            <div class="contributors">
+              <div class="contributor">
+                <div class="contributor-avatar"></div>
+                <span class="contributor-name">tria-dev</span>
+              </div>
+              <div class="contributor">
+                <div class="contributor-avatar"></div>
+                <span class="contributor-name">quiz-master</span>
+              </div>
+              <div class="contributor">
+                <div class="contributor-avatar"></div>
+                <span class="contributor-name">blockchain-expert</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div>© 2023 Tria Quiz. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="#" class="footer-link">Terms</a>
+        <a href="#" class="footer-link">Privacy</a>
+        <a href="#" class="footer-link">Security</a>
+        <a href="#" class="footer-link">Status</a>
+        <a href="#" class="footer-link">Help</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const questions = document.querySelectorAll('.question');
+      const nextBtn = document.getElementById('next-btn');
+      const prevBtn = document.getElementById('prev-btn');
+      const submitBtn = document.getElementById('submit-btn');
+      const restartBtn = document.getElementById('restart-btn');
+      const resultContainer = document.getElementById('result');
+      const quizBody = document.querySelector('.quiz-body');
+      const footer = document.getElementById('footer');
+      const scoreElement = document.getElementById('score');
+      const messageElement = document.getElementById('message');
+      const answerDetailsElement = document.getElementById('answer-details');
+      
+      let currentQuestion = 0;
+      const totalQuestions = questions.length;
+      const answers = {
+        q1: "B",
+        q2: "B",
+        q3: "C",
+        q4: "A",
+        q5: "B"
+      };
+      
+      // Initialize the quiz
+      updateButtons();
+      
+      // Next button click handler
+      nextBtn.addEventListener('click', function() {
+        if (currentQuestion < totalQuestions - 1) {
+          // Check if current question is answered
+          const currentOptions = questions[currentQuestion].querySelectorAll('input[type="radio"]');
+          let answered = false;
+          
+          currentOptions.forEach(option => {
+            if (option.checked) answered = true;
+          });
+          
+          if (!answered) {
+            alert('Please select an answer before proceeding.');
+            return;
+          }
+          
+          // Hide current question and show next
+          questions[currentQuestion].classList.add('hidden');
+          currentQuestion++;
+          questions[currentQuestion].classList.remove('hidden');
+          
+          // Update buttons
+          updateButtons();
+        }
+      });
+      
+      // Previous button click handler
+      prevBtn.addEventListener('click', function() {
+        if (currentQuestion > 0) {
+          questions[currentQuestion].classList.add('hidden');
+          currentQuestion--;
+          questions[currentQuestion].classList.remove('hidden');
+          
+          // Update buttons
+          updateButtons();
+        }
+      });
+      
+      // Submit button click handler
+      submitBtn.addEventListener('click', function() {
+        // Check if last question is answered
+        const lastOptions = questions[totalQuestions - 1].querySelectorAll('input[type="radio"]');
+        let answered = false;
+        
+        lastOptions.forEach(option => {
+          if (option.checked) answered = true;
+        });
+        
+        if (!answered) {
+          alert('Please select an answer before submitting.');
+          return;
+        }
+        
+        // Calculate score
+        let score = 0;
+        const userAnswers = {};
+        
+        for (let i = 0; i < totalQuestions; i++) {
+          const questionId = `q${i+1}`;
+          const selectedOption = document.querySelector(`input[name="${questionId}"]:checked`);
+          
+          if (selectedOption) {
+            userAnswers[questionId] = selectedOption.value;
+            if (selectedOption.value === answers[questionId]) {
+              score++;
+            }
+          }
+        }
+        
+        // Display results
+        showResults(score, userAnswers);
+      });
+      
+      // Restart button click handler
+      restartBtn.addEventListener('click', function() {
+        // Reset form
+        document.getElementById('quizForm').reset();
+        
+        // Reset UI
+        questions.forEach((question, index) => {
+          if (index === 0) {
+            question.classList.remove('hidden');
+          } else {
+            question.classList.add('hidden');
+          }
+        });
+        
+        resultContainer.classList.add('hidden');
+        quizBody.classList.remove('hidden');
+        footer.classList.remove('hidden');
+        
+        // Reset state
+        currentQuestion = 0;
+        updateButtons();
+      });
+      
+      // Option selection handler
+      document.querySelectorAll('.option').forEach(option => {
+        option.addEventListener('click', function() {
+          const radio = this.querySelector('input[type="radio"]');
+          radio.checked = true;
+          
+          // Update UI for selected option
+          this.parentElement.querySelectorAll('.option').forEach(opt => {
+            opt.classList.remove('selected');
+          });
+          this.classList.add('selected');
+        });
+      });
+      
+      // Update button states
+      function updateButtons() {
+        if (currentQuestion === 0) {
+          prevBtn.disabled = true;
+          prevBtn.style.opacity = '0.5';
+        } else {
+          prevBtn.disabled = false;
+          prevBtn.style.opacity = '1';
+        }
+        
+        if (currentQuestion === totalQuestions - 1) {
+          nextBtn.classList.add('hidden');
+          submitBtn.classList.remove('hidden');
+        } else {
+          nextBtn.classList.remove('hidden');
+          submitBtn.classList.add('hidden');
+        }
+      }
+      
+      // Show results
+      function showResults(score, userAnswers) {
+        // Hide quiz and show results
+        quizBody.classList.add('hidden');
+        footer.classList.add('hidden');
+        resultContainer.classList.remove('hidden');
+        
+        // Update score and message
+        scoreElement.textContent = `${score}/${totalQuestions}`;
+        
+        let message = '';
+        if (score === totalQuestions) {
+          message = "Excellent! You're a Tria expert!";
+          resultContainer.querySelector('.result-icon').innerHTML = '<i class="fas fa-trophy" style="color: #db6d28;"></i>';
+        } else if (score >= 3) {
+          message = "Good job! You know quite a bit about Tria.";
+          resultContainer.querySelector('.result-icon').innerHTML = '<i class="fas fa-star" style="color: #58a6ff;"></i>';
+        } else {
+          message = "Keep learning! Tria has some amazing features to explore.";
+          resultContainer.querySelector('.result-icon').innerHTML = '<i class="fas fa-graduation-cap" style="color: #3fb950;"></i>';
+        }
+        
+        messageElement.textContent = message;
+        
+        // Show answer details
+        let detailsHTML = '';
+        for (let i = 1; i <= totalQuestions; i++) {
+          const questionId = `q${i}`;
+          const userAnswer = userAnswers[questionId];
+          const correctAnswer = answers[questionId];
+          const isCorrect = userAnswer === correctAnswer;
+          
+          detailsHTML += `
+            <div style="margin-bottom: 12px; padding: 12px; border-radius: 6px; background: ${isCorrect ? 'rgba(63, 185, 80, 0.1)' : 'rgba(248, 81, 73, 0.1)'}; border-left: 4px solid ${isCorrect ? '#3fb950' : '#f85149'}">
+              <div style="font-weight: 600; margin-bottom: 6px;">Question ${i}</div>
+              <div>Your answer: <span class="${isCorrect ? 'correct-answer' : 'wrong-answer'}">${userAnswer}</span></div>
+              ${!isCorrect ? `<div>Correct answer: <span class="correct-answer">${correctAnswer}</span></div>` : ''}
+            </div>
+          `;
+        }
+        
+        answerDetailsElement.innerHTML = detailsHTML;
+      }
+    });
+  </script>
+</body>
+</html>

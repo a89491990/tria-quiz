@@ -1,752 +1,472 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tria Quiz</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #6C63FF;
-      --primary-dark: #5752D3;
-      --secondary: #FF6584;
-      --accent: #36D1DC;
-      --light: #F8F9FA;
-      --dark: #2A2D3E;
-      --success: #4CAF50;
-      --warning: #FF9800;
-      --danger: #F44336;
-      --card-bg: rgba(255, 255, 255, 0.9);
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      --transition: all 0.3s ease;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tria.so Quiz Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-      color: var(--dark);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 2rem;
+        }
 
-    .container {
-      width: 100%;
-      max-width: 900px;
-      margin: 20px auto;
-    }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
 
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-      color: white;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
 
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
 
-    header p {
-      font-size: 1.2rem;
-      opacity: 0.9;
-    }
+        .progress-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 10px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
 
-    .quiz-container {
-      background: var(--card-bg);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-      transition: var(--transition);
-    }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
 
-    .quiz-header {
-      background: var(--primary);
-      color: white;
-      padding: 20px;
-      text-align: center;
-      position: relative;
-    }
+        .question-container {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
 
-    .quiz-header h2 {
-      font-size: 1.8rem;
-    }
+        .question-number {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
 
-    .progress-bar {
-      height: 6px;
-      background: rgba(255, 255, 255, 0.3);
-      margin-top: 15px;
-      border-radius: 3px;
-      overflow: hidden;
-    }
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
 
-    .progress {
-      height: 100%;
-      background: white;
-      width: 0%;
-      transition: width 0.5s ease;
-    }
+        .options-container {
+            display: grid;
+            gap: 1rem;
+        }
 
-    .quiz-body {
-      padding: 30px;
-    }
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
 
-    .question {
-      margin-bottom: 30px;
-      animation: fadeIn 0.5s ease;
-    }
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
 
-    .question h3 {
-      font-size: 1.4rem;
-      margin-bottom: 15px;
-      color: var(--dark);
-      display: flex;
-      align-items: center;
-    }
+        .option.selected {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ff8a00;
+            box-shadow: 0 0 15px rgba(255, 138, 0, 0.3);
+        }
 
-    .question-number {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 30px;
-      height: 30px;
-      background: var(--primary);
-      color: white;
-      border-radius: 50%;
-      margin-right: 10px;
-      font-size: 0.9rem;
-    }
+        .option.correct {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: #4CAF50;
+        }
 
-    .options {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
+        .option.incorrect {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: #F44336;
+        }
 
-    .option {
-      display: flex;
-      align-items: center;
-      padding: 15px;
-      background: white;
-      border: 2px solid #e0e0e0;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
+        .option input {
+            margin-right: 1rem;
+            transform: scale(1.2);
+        }
 
-    .option:hover {
-      border-color: var(--primary);
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
 
-    .option.selected {
-      border-color: var(--primary);
-      background: rgba(108, 99, 255, 0.05);
-    }
+        button {
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
 
-    .option input {
-      display: none;
-    }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
 
-    .option-label {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      cursor: pointer;
-    }
+        button:disabled {
+            background: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
 
-    .option-marker {
-      width: 22px;
-      height: 22px;
-      border: 2px solid #ddd;
-      border-radius: 50%;
-      margin-right: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-    }
+        .result-container {
+            text-align: center;
+            padding: 2rem;
+        }
 
-    .option.selected .option-marker {
-      border-color: var(--primary);
-      background: var(--primary);
-    }
+        .score {
+            font-size: 3rem;
+            margin: 1rem 0;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
 
-    .option.selected .option-marker::after {
-      content: '';
-      width: 10px;
-      height: 10px;
-      background: white;
-      border-radius: 50%;
-    }
+        .feedback {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
 
-    .option-text {
-      font-size: 1rem;
-    }
+        .hidden {
+            display: none;
+        }
 
-    .option-letter {
-      font-weight: bold;
-      margin-right: 8px;
-      color: var(--primary);
-    }
+        .explanation {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-style: italic;
+        }
 
-    .quiz-footer {
-      display: flex;
-      justify-content: space-between;
-      padding: 20px 30px;
-      background: #f8f9fa;
-      border-top: 1px solid #eaeaea;
-    }
-
-    .btn {
-      padding: 12px 25px;
-      border: none;
-      border-radius: 50px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
-    }
-
-    .btn-secondary {
-      background: white;
-      color: var(--dark);
-      border: 2px solid #e0e0e0;
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    .result-container {
-      text-align: center;
-      padding: 40px 30px;
-      animation: fadeIn 0.8s ease;
-    }
-
-    .result-icon {
-      font-size: 5rem;
-      margin-bottom: 20px;
-    }
-
-    .result-title {
-      font-size: 2rem;
-      margin-bottom: 15px;
-      color: var(--dark);
-    }
-
-    .result-score {
-      font-size: 3rem;
-      font-weight: 700;
-      margin: 20px 0;
-      color: var(--primary);
-    }
-
-    .result-message {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-
-    .result-details {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 20px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .result-details h3 {
-      margin-bottom: 15px;
-      color: var(--dark);
-    }
-
-    .correct-answer {
-      color: var(--success);
-      font-weight: 600;
-    }
-
-    .wrong-answer {
-      color: var(--danger);
-      text-decoration: line-through;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-
-    .pulse {
-      animation: pulse 1.5s infinite;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 10px;
-      }
-      
-      header h1 {
-        font-size: 2rem;
-      }
-      
-      .quiz-body {
-        padding: 20px;
-      }
-      
-      .quiz-footer {
-        flex-direction: column;
-        gap: 15px;
-      }
-      
-      .btn {
-        width: 100%;
-      }
-    }
-  </style>
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
     <header>
-      <h1>Tria Knowledge Quiz</h1>
-      <p>Test your knowledge about Tria's innovative blockchain solutions</p>
+        <h1>Tria.so Quiz Challenge</h1>
+        <p class="subtitle">Test your knowledge with these 5 questions</p>
     </header>
 
-    <div class="quiz-container">
-      <div class="quiz-header">
-        <h2>What do you know about Tria?</h2>
-        <div class="progress-bar">
-          <div class="progress" id="progress"></div>
-        </div>
-      </div>
-
-      <form id="quizForm">
-        <div class="quiz-body">
-          <!-- Question 1 -->
-          <div class="question" id="q1">
-            <h3><span class="question-number">1</span>What key infrastructure does Tria use to enable gasless cross‑chain settlements?</h3>
-            <div class="options">
-              <label class="option">
-                <input type="radio" name="q1" value="A">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">A</span> Token Share Network</div>
-                </div>
-              </label>
-              <label class="option">
-                <input type="radio" name="q1" value="B">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">B</span> BestPath AVS</div>
-                </div>
-              </label>
-              <label class="option">
-                <input type="radio" name="q1" value="C">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">C</span> Global Swap Bridge</div>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <!-- Question 2 -->
-          <div class="question hidden" id="q2">
-            <h3><span class="question-number">2</span>Which financial activities does Tria unify in one app?</h3>
-            <div class="options">
-              <label class="option">
-                <input type="radio" name="q2" value="A">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">A</span> Lending and Insurance</div>
-                </div>
-              </label>
-              <label class="option">
-                <input type="radio" name="q2" value="B">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">B</span> Spending, trading and earning</div>
-                </div>
-              </label>
-              <label class="option">
-                <input type="radio" name="q2" value="C">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">C</span> Only trading and yield</div>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <!-- Question 3 -->
-          <div class="question hidden" id="q3">
-            <h3><span class="question-number">3</span>How many countries is Tria's card reportedly accepted in?</h3>
-            <div class="options">
-              <label class="option">
-                <input type="radio" name="q3" value="A">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">A</span> 50+ countries</div>
-                </div>
-              </label>
-              <label class="option">
-                <input type="radio" name="q3" value="B">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">B</span> 100+ countries</div>
-                </div>
-              </label>
-              <label class="option">
-                <input type="radio" name="q3" value="C">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">C</span> 150+ countries</div>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <!-- Question 4 -->
-          <div class="question hidden" id="q4">
-            <h3><span class="question-number">4</span>What does Tria claim users don't need to worry about when using its chain abstraction model?</h3>
-            <div class="options">
-              <label class="option">
-                <input type="radio" name="q4" value="A">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">A</span> Holding gas tokens, bridging assets, managing multiple wallets</div>
-                </div>
-              </label>
-              <label class="option">
-                <input type="radio" name="q4" value="B">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">B</span> Managing fiat bank accounts</div>
-                </div>
-              </label>
-              <label class="option">
-                <input type="radio" name="q4" value="C">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">C</span> VPN access and KYC</div>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <!-- Question 5 -->
-          <div class="question hidden" id="q5">
-            <h3><span class="question-number">5</span>How much funding did Tria raise to build its self‑custodial neobank and payments infrastructure?</h3>
-            <div class="options">
-              <label class="option">
-                <input type="radio" name="q5" value="A">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">A</span> USD 5 million</div>
-                </div>
-              </label>
-              <label class="option">
-                <input type="radio" name="q5" value="B">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">B</span> USD 12 million</div>
-                </div>
-              </label>
-              <label class="option">
-                <input type="radio" name="q5" value="C">
-                <div class="option-label">
-                  <div class="option-marker"></div>
-                  <div class="option-text"><span class="option-letter">C</span> USD 20 million</div>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <!-- Results -->
-          <div class="result-container hidden" id="result">
-            <div class="result-icon">
-              <i class="fas fa-trophy"></i>
-            </div>
-            <h2 class="result-title">Quiz Complete!</h2>
-            <div class="result-score" id="score">0/5</div>
-            <p class="result-message" id="message">You scored 0 out of 5. Keep learning about Tria!</p>
-            <div class="result-details">
-              <h3>Your Answers</h3>
-              <div id="answer-details"></div>
-            </div>
-            <button type="button" class="btn btn-primary" id="restart-btn" style="margin-top: 30px;">
-              <i class="fas fa-redo"></i> Take Quiz Again
-            </button>
-          </div>
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
         </div>
 
-        <div class="quiz-footer" id="footer">
-          <button type="button" class="btn btn-secondary" id="prev-btn">
-            <i class="fas fa-arrow-left"></i> Previous
-          </button>
-          <button type="button" class="btn btn-primary" id="next-btn">
-            Next <i class="fas fa-arrow-right"></i>
-          </button>
-          <button type="button" class="btn btn-primary hidden" id="submit-btn">
-            Submit Answers <i class="fas fa-paper-plane"></i>
-          </button>
+        <div id="quiz-container">
+            <!-- Questions will be dynamically inserted here -->
         </div>
-      </form>
+
+        <div class="navigation">
+            <button id="prev-btn" disabled>Previous</button>
+            <button id="next-btn">Next</button>
+        </div>
+
+        <div id="result-container" class="result-container hidden">
+            <h2>Quiz Completed!</h2>
+            <div class="score" id="score">0/5</div>
+            <p class="feedback" id="feedback">Great job!</p>
+            <button id="restart-btn">Take Quiz Again</button>
+        </div>
     </div>
-  </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const questions = document.querySelectorAll('.question');
-      const progressBar = document.getElementById('progress');
-      const nextBtn = document.getElementById('next-btn');
-      const prevBtn = document.getElementById('prev-btn');
-      const submitBtn = document.getElementById('submit-btn');
-      const restartBtn = document.getElementById('restart-btn');
-      const resultContainer = document.getElementById('result');
-      const quizBody = document.querySelector('.quiz-body');
-      const footer = document.getElementById('footer');
-      const scoreElement = document.getElementById('score');
-      const messageElement = document.getElementById('message');
-      const answerDetailsElement = document.getElementById('answer-details');
-      
-      let currentQuestion = 0;
-      const totalQuestions = questions.length;
-      const answers = {
-        q1: "B",
-        q2: "B",
-        q3: "C",
-        q4: "A",
-        q5: "B"
-      };
-      
-      // Initialize the quiz
-      updateProgress();
-      
-      // Next button click handler
-      nextBtn.addEventListener('click', function() {
-        if (currentQuestion < totalQuestions - 1) {
-          // Check if current question is answered
-          const currentOptions = questions[currentQuestion].querySelectorAll('input[type="radio"]');
-          let answered = false;
-          
-          currentOptions.forEach(option => {
-            if (option.checked) answered = true;
-          });
-          
-          if (!answered) {
-            alert('Please select an answer before proceeding.');
-            return;
-          }
-          
-          // Hide current question and show next
-          questions[currentQuestion].classList.add('hidden');
-          currentQuestion++;
-          questions[currentQuestion].classList.remove('hidden');
-          
-          // Update buttons
-          updateButtons();
-          updateProgress();
-        }
-      });
-      
-      // Previous button click handler
-      prevBtn.addEventListener('click', function() {
-        if (currentQuestion > 0) {
-          questions[currentQuestion].classList.add('hidden');
-          currentQuestion--;
-          questions[currentQuestion].classList.remove('hidden');
-          
-          // Update buttons
-          updateButtons();
-          updateProgress();
-        }
-      });
-      
-      // Submit button click handler
-      submitBtn.addEventListener('click', function() {
-        // Check if last question is answered
-        const lastOptions = questions[totalQuestions - 1].querySelectorAll('input[type="radio"]');
-        let answered = false;
-        
-        lastOptions.forEach(option => {
-          if (option.checked) answered = true;
-        });
-        
-        if (!answered) {
-          alert('Please select an answer before submitting.');
-          return;
-        }
-        
-        // Calculate score
-        let score = 0;
-        const userAnswers = {};
-        
-        for (let i = 0; i < totalQuestions; i++) {
-          const questionId = `q${i+1}`;
-          const selectedOption = document.querySelector(`input[name="${questionId}"]:checked`);
-          
-          if (selectedOption) {
-            userAnswers[questionId] = selectedOption.value;
-            if (selectedOption.value === answers[questionId]) {
-              score++;
+    <script>
+        // Quiz data
+        const quizData = [
+            {
+                question: "What is the primary focus of Tria.so?",
+                options: [
+                    "Digital marketing services",
+                    "AI-powered customer support",
+                    "Website development and optimization",
+                    "Social media management"
+                ],
+                correct: 2,
+                explanation: "Tria.so specializes in website development and optimization, helping businesses create effective online presences."
+            },
+            {
+                question: "Which technology is NOT typically associated with modern web development?",
+                options: [
+                    "React",
+                    "WebAssembly",
+                    "COBOL",
+                    "GraphQL"
+                ],
+                correct: 2,
+                explanation: "COBOL is a legacy programming language primarily used in business and finance applications, not modern web development."
+            },
+            {
+                question: "What does 'responsive design' mean in web development?",
+                options: [
+                    "Websites that load quickly",
+                    "Websites that adapt to different screen sizes",
+                    "Websites with interactive elements",
+                    "Websites with high security"
+                ],
+                correct: 1,
+                explanation: "Responsive design ensures websites look good and function properly on all devices, from mobile phones to desktop computers."
+            },
+            {
+                question: "Which of these is a key benefit of using a CSS framework like Tailwind?",
+                options: [
+                    "Eliminates the need for HTML",
+                    "Reduces the amount of custom CSS needed",
+                    "Automatically fixes JavaScript errors",
+                    "Improves website security"
+                ],
+                correct: 1,
+                explanation: "CSS frameworks like Tailwind provide pre-built utility classes that reduce the need to write custom CSS from scratch."
+            },
+            {
+                question: "What is the purpose of A/B testing in website optimization?",
+                options: [
+                    "To test website loading speed",
+                    "To compare two versions of a webpage",
+                    "To check for broken links",
+                    "To analyze user demographics"
+                ],
+                correct: 1,
+                explanation: "A/B testing compares two versions of a webpage to determine which one performs better in terms of user engagement or conversions."
             }
-          }
+        ];
+
+        // DOM elements
+        const quizContainer = document.getElementById('quiz-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const resultContainer = document.getElementById('result-container');
+        const scoreElement = document.getElementById('score');
+        const feedbackElement = document.getElementById('feedback');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // Quiz state
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let quizCompleted = false;
+
+        // Initialize the quiz
+        function initQuiz() {
+            showQuestion();
+            updateProgressBar();
+            updateNavigationButtons();
         }
-        
-        // Display results
-        showResults(score, userAnswers);
-      });
-      
-      // Restart button click handler
-      restartBtn.addEventListener('click', function() {
-        // Reset form
-        document.getElementById('quizForm').reset();
-        
-        // Reset UI
-        questions.forEach((question, index) => {
-          if (index === 0) {
-            question.classList.remove('hidden');
-          } else {
-            question.classList.add('hidden');
-          }
+
+        // Display current question
+        function showQuestion() {
+            const question = quizData[currentQuestion];
+            
+            let optionsHTML = '';
+            question.options.forEach((option, index) => {
+                const isSelected = userAnswers[currentQuestion] === index;
+                const optionClass = isSelected ? 'option selected' : 'option';
+                
+                optionsHTML += `
+                    <div class="${optionClass}" data-index="${index}">
+                        <input type="radio" id="option-${index}" name="option" ${isSelected ? 'checked' : ''}>
+                        <label for="option-${index}">${option}</label>
+                    </div>
+                `;
+            });
+
+            const questionHTML = `
+                <div class="question-container">
+                    <div class="question-number">Question ${currentQuestion + 1} of ${quizData.length}</div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options-container">
+                        ${optionsHTML}
+                    </div>
+                    ${userAnswers[currentQuestion] !== null ? `<div class="explanation">${question.explanation}</div>` : ''}
+                </div>
+            `;
+
+            quizContainer.innerHTML = questionHTML;
+
+            // Add event listeners to options
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', () => {
+                    if (quizCompleted) return;
+                    
+                    const selectedIndex = parseInt(option.getAttribute('data-index'));
+                    userAnswers[currentQuestion] = selectedIndex;
+                    
+                    // Update UI
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    option.classList.add('selected');
+                    
+                    // Show explanation
+                    const explanation = document.querySelector('.explanation');
+                    if (!explanation) {
+                        const questionContainer = document.querySelector('.question-container');
+                        const explanationDiv = document.createElement('div');
+                        explanationDiv.className = 'explanation';
+                        explanationDiv.textContent = question.explanation;
+                        questionContainer.appendChild(explanationDiv);
+                    }
+                    
+                    updateNavigationButtons();
+                });
+            });
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // Update navigation buttons
+        function updateNavigationButtons() {
+            prevBtn.disabled = currentQuestion === 0;
+            
+            if (currentQuestion === quizData.length - 1) {
+                nextBtn.textContent = 'Finish';
+            } else {
+                nextBtn.textContent = 'Next';
+            }
+            
+            if (userAnswers[currentQuestion] !== null) {
+                nextBtn.disabled = false;
+            } else {
+                nextBtn.disabled = currentQuestion !== quizData.length - 1;
+            }
+        }
+
+        // Calculate and show results
+        function showResults() {
+            let score = 0;
+            quizData.forEach((question, index) => {
+                if (userAnswers[index] === question.correct) {
+                    score++;
+                }
+            });
+            
+            scoreElement.textContent = `${score}/${quizData.length}`;
+            
+            // Set feedback based on score
+            if (score === quizData.length) {
+                feedbackElement.textContent = "Perfect! You're a web development expert!";
+            } else if (score >= quizData.length * 0.7) {
+                feedbackElement.textContent = "Great job! You have solid web development knowledge.";
+            } else if (score >= quizData.length * 0.5) {
+                feedbackElement.textContent = "Good effort! Keep learning about web development.";
+            } else {
+                feedbackElement.textContent = "Keep studying! Web development is a journey.";
+            }
+            
+            resultContainer.classList.remove('hidden');
+            quizContainer.classList.add('hidden');
+            document.querySelector('.navigation').classList.add('hidden');
+        }
+
+        // Event listeners
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+                updateProgressBar();
+                updateNavigationButtons();
+            }
         });
-        
-        resultContainer.classList.add('hidden');
-        quizBody.classList.remove('hidden');
-        footer.classList.remove('hidden');
-        
-        // Reset state
-        currentQuestion = 0;
-        updateButtons();
-        updateProgress();
-      });
-      
-      // Option selection handler
-      document.querySelectorAll('.option').forEach(option => {
-        option.addEventListener('click', function() {
-          const radio = this.querySelector('input[type="radio"]');
-          radio.checked = true;
-          
-          // Update UI for selected option
-          this.parentElement.querySelectorAll('.option').forEach(opt => {
-            opt.classList.remove('selected');
-          });
-          this.classList.add('selected');
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                showQuestion();
+                updateProgressBar();
+                updateNavigationButtons();
+            } else {
+                // Finish quiz
+                quizCompleted = true;
+                showResults();
+            }
         });
-      });
-      
-      // Update button states
-      function updateButtons() {
-        if (currentQuestion === 0) {
-          prevBtn.disabled = true;
-          prevBtn.style.opacity = '0.5';
-        } else {
-          prevBtn.disabled = false;
-          prevBtn.style.opacity = '1';
-        }
-        
-        if (currentQuestion === totalQuestions - 1) {
-          nextBtn.classList.add('hidden');
-          submitBtn.classList.remove('hidden');
-        } else {
-          nextBtn.classList.remove('hidden');
-          submitBtn.classList.add('hidden');
-        }
-      }
-      
-      // Update progress bar
-      function updateProgress() {
-        const progress = ((currentQuestion + 1) / totalQuestions) * 100;
-        progressBar.style.width = `${progress}%`;
-      }
-      
-      // Show results
-      function showResults(score, userAnswers) {
-        // Hide quiz and show results
-        quizBody.classList.add('hidden');
-        footer.classList.add('hidden');
-        resultContainer.classList.remove('hidden');
-        
-        // Update score and message
-        scoreElement.textContent = `${score}/${totalQuestions}`;
-        
-        let message = '';
-        if (score === totalQuestions) {
-          message = "Excellent! You're a Tria expert!";
-          resultContainer.querySelector('.result-icon').innerHTML = '<i class="fas fa-trophy" style="color: #FFD700;"></i>';
-        } else if (score >= 3) {
-          message = "Good job! You know quite a bit about Tria.";
-          resultContainer.querySelector('.result-icon').innerHTML = '<i class="fas fa-star" style="color: #36D1DC;"></i>';
-        } else {
-          message = "Keep learning! Tria has some amazing features to explore.";
-          resultContainer.querySelector('.result-icon').innerHTML = '<i class="fas fa-graduation-cap" style="color: #6C63FF;"></i>';
-        }
-        
-        messageElement.textContent = message;
-        
-        // Show answer details
-        let detailsHTML = '';
-        for (let i = 1; i <= totalQuestions; i++) {
-          const questionId = `q${i}`;
-          const userAnswer = userAnswers[questionId];
-          const correctAnswer = answers[questionId];
-          const isCorrect = userAnswer === correctAnswer;
-          
-          detailsHTML += `
-            <div style="margin-bottom: 15px; padding: 10px; border-radius: 8px; background: ${isCorrect ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)'}">
-              <div style="font-weight: 600; margin-bottom: 5px;">Question ${i}</div>
-              <div>Your answer: <span class="${isCorrect ? 'correct-answer' : 'wrong-answer'}">${userAnswer}</span></div>
-              ${!isCorrect ? `<div>Correct answer: <span class="correct-answer">${correctAnswer}</span></div>` : ''}
-            </div>
-          `;
-        }
-        
-        answerDetailsElement.innerHTML = detailsHTML;
-      }
-      
-      // Initialize buttons
-      updateButtons();
-    });
-  </script>
+
+        restartBtn.addEventListener('click', () => {
+            currentQuestion = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            quizCompleted = false;
+            
+            resultContainer.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            document.querySelector('.navigation').classList.remove('hidden');
+            
+            showQuestion();
+            updateProgressBar();
+            updateNavigationButtons();
+        });
+
+        // Initialize the quiz
+        initQuiz();
+    </script>
 </body>
 </html>
